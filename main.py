@@ -50,32 +50,32 @@ def main() -> None:
     for directory in (ANNOTATIONS_DIR, REPORTS_DIR, PLOTS_DIR):
         directory.mkdir(parents=True, exist_ok=True)
 
-    print("Пункт 1. Создание исходной аннотации.")
+    print("Создание исходной аннотации.")
     dataframe = create_annotation_dataframe()
     save_annotation(dataframe, ANNOTATION_CSV)
     print(f"Сохранено изображений: {len(dataframe)}")
 
-    print("Пункт 2. Проверка и нормализация названий колонок.")
+    print("Проверка и нормализация названий колонок.")
     dataframe = normalize_column_names(dataframe)
     save_normalized_dataframe(dataframe, NORMALIZED_CSV)
 
-    print("Пункт 3. Добавление числовых меток классов.")
+    print("Добавление числовых меток классов.")
     dataframe = add_numeric_class_labels(dataframe)
     save_labeled_dataframe(dataframe, LABELED_CSV)
 
-    print("Пункт 4. Получение размеров изображений.")
+    print("Получение размеров изображений.")
     dataframe = add_image_dimensions(dataframe)
     save_dimensions_dataframe(dataframe, DIMENSIONS_CSV)
     dataframe = pd.read_csv(DIMENSIONS_CSV)
 
-    print("Пункт 5. Описательная статистика и баланс классов.")
+    print("Описательная статистика и баланс классов.")
     describe_table, counts_table = save_statistics(dataframe)
     print(describe_table)
     print(counts_table)
     print(f"Набор сбалансирован: {is_dataset_balanced(dataframe)}")
     plot_class_distribution(dataframe, PLOTS_DIR / "class_distribution.png")
 
-    print("Пункт 6. Фильтрация по классу.")
+    print("Фильтрация по классу.")
     filtered_class = filter_by_class(dataframe, "cat")
     filtered_class.to_csv(
         FILTERED_CLASS_CSV,
@@ -84,7 +84,7 @@ def main() -> None:
     )
     print(f"Изображений cat: {len(filtered_class)}")
 
-    print("Пункт 7. Фильтрация по классу и размерам.")
+    print("Фильтрация по классу и размерам.")
     filtered_dimensions = filter_by_class_and_dimensions(
         dataframe,
         class_label="cat",
@@ -98,7 +98,7 @@ def main() -> None:
     )
     print(f"Изображений cat до 800×600: {len(filtered_dimensions)}")
 
-    print("Пункт 8. Статистика количества пикселей и примеры изображений.")
+    print("Статистика количества пикселей и примеры изображений.")
     pixel_dataframe = add_pixel_count(dataframe)
     pixel_dataframe.to_csv(ANALYSIS_CSV, index=False, encoding="utf-8-sig")
     pixel_stats = group_pixel_statistics(pixel_dataframe)
@@ -111,7 +111,7 @@ def main() -> None:
         output_path=PLOTS_DIR / "sample_images.png",
     )
 
-    print("Пункт 9. Вычисление гистограмм случайных изображений.")
+    print("Вычисление гистограмм случайных изображений.")
     for class_name in ("cat", "dog"):
         histograms = calculate_random_image_histogram(
             pixel_dataframe,
@@ -119,7 +119,7 @@ def main() -> None:
         )
         save_histogram_arrays(histograms, class_name)
 
-    print("Пункт 10. Сохранение графиков гистограмм.")
+    print("Сохранение графиков гистограмм.")
     from plot_histograms import load_histogram_arrays
 
     for class_name in ("cat", "dog"):
